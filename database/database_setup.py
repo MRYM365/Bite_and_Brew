@@ -1,62 +1,63 @@
 import sqlite3
 import os
+from config import DB_PATH
 
-# Define the correct database path
-DB_PATH = os.path.join(os.path.dirname(__file__), 'database', 'database', 'coffee_shop.db')
+# Ensure the directory for the database exists
+os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 
+def initialize_database():
+    """Initialize the SQLite database and create tables if they don't exist."""
+    try:
+        # Create a connection to the SQLite database
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
 
-# Ensure the directory exists
-if not os.path.exists(os.path.dirname(DB_PATH)):
-    os.makedirs(os.path.dirname(DB_PATH))
+            # Create the tables
+            cursor.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE,
+                password TEXT NOT NULL,
+                role TEXT NOT NULL CHECK (role IN ('admin', 'staff'))
+            )
+            ''')
 
-# Check if the database already exists to prevent creating multiple databases
-if not os.path.exists(DB_PATH):
-    # Create a connection to the SQLite database (this will create the file if it doesn't exist)
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
+            cursor.execute('''
+            CREATE TABLE IF NOT EXISTS inventory (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                item_name TEXT NOT NULL UNIQUE,
+                quantity INTEGER NOT NULL CHECK (quantity >= 0),
+                price REAL NOT NULL CHECK (price > 0)
+            )
+            ''')
 
-    # Create the tables (if they don't already exist)
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        password TEXT NOT NULL,
-        role TEXT NOT NULL
-    )
-    ''')
+            cursor.execute('''
+            CREATE TABLE IF NOT EXISTS expenses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                expense_name TEXT NOT NULL,
+                amount REAL NOT NULL CHECK (amount > 0),
+                date TEXT NOT NULL
+            )
+            ''')
 
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS inventory (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        item_name TEXT NOT NULL,
-        quantity INTEGER NOT NULL,
-        price REAL NOT NULL
-    )
-    ''')
+            cursor.execute('''
+            CREATE TABLE IF NOT EXISTS sales (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                sale_date TEXT NOT NULL,
+                item_name TEXT NOT NULL,
+                quantity INTEGER NOT NULL CHECK (quantity > 0),
+                total_price REAL NOT NULL CHECK (total_price >= 0)
+            )
+            ''')
 
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS expenses (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        expense_name TEXT NOT NULL,
-        amount REAL NOT NULL,
-        date TEXT NOT NULL
-    )
-    ''')
+            print("Tables created successfully in the database!")
+    except sqlite3.OperationalError as oe:
+        print(f"Operational error: {oe}")
+    except sqlite3.Error as e:
+        print(f"SQLite error: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
 
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS sales (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        sale_date TEXT NOT NULL,
-        item_name TEXT NOT NULL,
-        quantity INTEGER NOT NULL,
-        total_price REAL NOT NULL
-    )
-    ''')
-
-    # Commit the changes and close the connection
-    conn.commit()
-    conn.close()
-
-    print("Tables created successfully in the database!")
-else:
-    print("Database already exists. Skipping table creation.")
+# Initialize the database
+if __name__ == "__main__":
+    initialize_database()
