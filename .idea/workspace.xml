@@ -5,27 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb7ebb15-c0ca-4f3c-bc1f-72a8bac57125" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/test_config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/business_logic/expense_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_logic/expense_logic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/business_logic/inventory_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_logic/inventory_logic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/business_logic/sales_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_logic/sales_logic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/business_logic/user_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_logic/user_logic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/coffee_shop.db" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/database/coffee_shop.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/database/coffee_shop.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/database/coffee_shop.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/database_setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/database_setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/insert_sample_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/insert_sample_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/presentation/expenses_window.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/presentation/inventory_window.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/presentation/login_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/presentation/login_window.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/presentation/main_window.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/presentation/sales_window.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/presentation/users_window.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_expenses.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_expenses.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_inventory.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inventory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_sales.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_sales.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_users.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_users.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +89,8 @@
       <workItem from="1734650164523" duration="2000" />
       <workItem from="1734698250836" duration="213000" />
       <workItem from="1734783276230" duration="12966000" />
-      <workItem from="1734878359931" duration="13106000" />
+      <workItem from="1734878359931" duration="15485000" />
+      <workItem from="1734968842998" duration="15270000" />
     </task>
     <servers />
   </component>
@@ -115,7 +100,7 @@
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Bite_and_Brew$check_db_path.coverage" NAME="check_db_path Coverage Results" MODIFIED="1734873121070" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bite_and_Brew$database_setup.coverage" NAME="database_setup Coverage Results" MODIFIED="1734878437968" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/database" />
-    <SUITE FILE_PATH="coverage/Bite_and_Brew$main.coverage" NAME="main Coverage Results" MODIFIED="1734913062112" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bite_and_Brew$main.coverage" NAME="main Coverage Results" MODIFIED="1735135021104" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bite_and_Brew$users_window.coverage" NAME="users_window Coverage Results" MODIFIED="1734377323259" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/presentation" />
     <SUITE FILE_PATH="coverage/Bite_and_Brew$insert_sample_data.coverage" NAME="insert_sample_data Coverage Results" MODIFIED="1734911677760" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/database" />
     <SUITE FILE_PATH="coverage/Bite_and_Brew$test_config.coverage" NAME="test_config Coverage Results" MODIFIED="1734874392162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

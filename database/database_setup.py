@@ -6,11 +6,14 @@ from config import DB_PATH
 os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 
 def initialize_database():
-    """Initialize the SQLite database and create tables if they don't exist."""
+    """Initialize the SQLite database and create tables with relationships."""
     try:
         # Create a connection to the SQLite database
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
+
+            # Enable foreign key support
+            cursor.execute("PRAGMA foreign_keys = ON;")
 
             # Create the tables
             cursor.execute('''
@@ -36,7 +39,9 @@ def initialize_database():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 expense_name TEXT NOT NULL,
                 amount REAL NOT NULL CHECK (amount > 0),
-                date TEXT NOT NULL
+                date TEXT NOT NULL,
+                created_by INTEGER NOT NULL,
+                FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
             )
             ''')
 
@@ -44,13 +49,14 @@ def initialize_database():
             CREATE TABLE IF NOT EXISTS sales (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 sale_date TEXT NOT NULL,
-                item_name TEXT NOT NULL,
+                item_id INTEGER NOT NULL,
                 quantity INTEGER NOT NULL CHECK (quantity > 0),
-                total_price REAL NOT NULL CHECK (total_price >= 0)
+                total_price REAL NOT NULL CHECK (total_price >= 0),
+                FOREIGN KEY (item_id) REFERENCES inventory(id) ON DELETE CASCADE
             )
             ''')
 
-            print("Tables created successfully in the database!")
+            print("Database initialized with proper relationships!")
     except sqlite3.OperationalError as oe:
         print(f"Operational error: {oe}")
     except sqlite3.Error as e:

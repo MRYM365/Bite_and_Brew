@@ -3,6 +3,8 @@ from tkinter import messagebox
 import sqlite3
 from config import DB_PATH
 import bcrypt  # To securely hash and verify passwords
+import matplotlib.pyplot as plt
+from datetime import datetime
 
 # --- Utility Functions ---
 def validate_credentials(username, password):
@@ -200,11 +202,17 @@ def execute_query(query, params=()):
 
 # --- CRUD for Inventory ---
 def display_inventory(content_frame):
-    """Display the Inventory Management section."""
+    """Display the Inventory Management section with optional low-stock warnings."""
     clear_content(content_frame)
 
     section_title = tk.Label(content_frame, text="Inventory Management", font=("Arial", 20, "bold"))
     section_title.pack(pady=10)
+
+    # Check for Low Stock Items
+    low_stock_items = execute_query("SELECT item_name FROM inventory WHERE quantity < 10")
+    if low_stock_items:
+        low_stock_message = "\n".join([item[0] for item in low_stock_items])
+        tk.Label(content_frame, text=f"Low Stock Items:\n{low_stock_message}", font=("Arial", 12), fg="red").pack(pady=5)
 
     # Table for Inventory
     table_frame = tk.Frame(content_frame)
@@ -235,6 +243,7 @@ def display_inventory(content_frame):
     # Add Item Button
     tk.Button(content_frame, text="Add Item", command=lambda: open_add_inventory_form(content_frame),
               font=("Arial", 12), bg="blue", fg="white").pack(pady=10)
+
 
 def open_add_inventory_form(content_frame):
     """Open a form to add a new inventory item."""
@@ -702,10 +711,198 @@ def delete_sale(content_frame, sale_id):
             messagebox.showerror("Database Error", f"An error occurred: {e}")
 
 
+def display_reports(content_frame):
+    """Display the Reports and Analytics section."""
+    clear_content(content_frame)
+
+    section_title = tk.Label(content_frame, text="Reports and Analytics", font=("Arial", 20, "bold"))
+    section_title.pack(pady=10)
+
+    # Sales Summary
+    tk.Button(content_frame, text="Sales Summary", command=lambda: sales_summary(content_frame),
+              font=("Arial", 12), bg="blue", fg="white").pack(pady=10)
 
 
-def open_main_window():
-    """Create and display the main application window."""
+
+    # Inventory Insights
+    def inventory_insights(content_frame):
+        """Display a table of low stock items in the main content area."""
+        clear_content(content_frame)  # Clear the content frame first
+
+        section_title = tk.Label(content_frame, text="Low Stock Inventory", font=("Arial", 20, "bold"))
+        section_title.pack(pady=10)
+
+        # Create a table frame for displaying the low stock items
+        table_frame = tk.Frame(content_frame)
+        table_frame.pack(pady=10)
+
+        # Add headers to the table
+        headers = ["Item Name", "Quantity"]
+        for col, header in enumerate(headers):
+            header_label = tk.Label(table_frame, text=header, font=("Arial", 12, "bold"), borderwidth=1, relief="solid",
+                                    width=20)
+            header_label.grid(row=0, column=col)
+
+        # Fetch and display low stock items
+        try:
+            with sqlite3.connect(DB_PATH) as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT item_name, quantity FROM inventory WHERE quantity < 10 ORDER BY quantity ASC")
+                low_stock_items = cursor.fetchall()
+
+                if not low_stock_items:
+                    no_items_label = tk.Label(content_frame, text="No low stock items found.", font=("Arial", 12),
+                                              fg="green")
+                    no_items_label.pack(pady=10)
+                else:
+                    for row, item in enumerate(low_stock_items, start=1):
+                        item_name, quantity = item
+                        tk.Label(table_frame, text=item_name, font=("Arial", 10), borderwidth=1, relief="solid",
+                                 width=20).grid(row=row, column=0)
+                        tk.Label(table_frame, text=quantity, font=("Arial", 10), borderwidth=1, relief="solid",
+                                 width=20).grid(row=row, column=1)
+        except sqlite3.Error as e:
+            messagebox.showerror("Database Error", f"An error occurred: {e}")
+
+    # Buttons for Each Report
+    tk.Button(content_frame, text="Expense Summary", command=lambda: expense_summary(content_frame), font=("Arial", 12), bg="orange", fg="white").pack(pady=10)
+    tk.Button(content_frame, text="Inventory Insights", command=lambda: inventory_insights(content_frame), font=("Arial", 12), bg="green", fg="white").pack(pady=10)
+
+
+def sales_summary(content_frame):
+    """Display sales summary with filtering options."""
+    clear_content(content_frame)
+
+    section_title = tk.Label(content_frame, text="Sales Summary", font=("Arial", 20, "bold"))
+    section_title.pack(pady=10)
+
+    # Dropdown for selecting the time period
+    period_label = tk.Label(content_frame, text="Select Time Period:", font=("Arial", 12))
+    period_label.pack(pady=5)
+
+    period_options = ["Week", "Month", "Year"]
+    selected_period = tk.StringVar(value="Week")
+
+    period_dropdown = tk.OptionMenu(content_frame, selected_period, *period_options)
+    period_dropdown.config(font=("Arial", 12), width=10)
+    period_dropdown.pack(pady=5)
+
+    # Table Frame
+    table_frame = tk.Frame(content_frame)
+    table_frame.pack(pady=10)
+
+    # Headers for Sales Table
+    headers = ["Sale Date", "Item Name", "Quantity", "Total Price"]
+    for col, header in enumerate(headers):
+        header_label = tk.Label(table_frame, text=header, font=("Arial", 12, "bold"), borderwidth=1, relief="solid", width=15)
+        header_label.grid(row=0, column=col)
+
+    def fetch_and_display_sales():
+        """Fetch and display sales data based on the selected time period."""
+        for widget in table_frame.winfo_children():
+            widget.destroy()
+
+        for col, header in enumerate(headers):
+            header_label = tk.Label(table_frame, text=header, font=("Arial", 12, "bold"), borderwidth=1, relief="solid", width=15)
+            header_label.grid(row=0, column=col)
+
+        period = selected_period.get()
+        query = ""
+
+        if period == "Week":
+            query = "SELECT sale_date, item_name, quantity, total_price FROM sales WHERE sale_date >= date('now', '-7 days')"
+        elif period == "Month":
+            query = "SELECT sale_date, item_name, quantity, total_price FROM sales WHERE sale_date >= date('now', '-1 month')"
+        elif period == "Year":
+            query = "SELECT sale_date, item_name, quantity, total_price FROM sales WHERE sale_date >= date('now', '-1 year')"
+
+        try:
+            with sqlite3.connect(DB_PATH) as conn:
+                cursor = conn.cursor()
+                cursor.execute(query)
+                sales = cursor.fetchall()
+
+                for row, sale in enumerate(sales, start=1):
+                    for col, value in enumerate(sale):
+                        tk.Label(table_frame, text=value, font=("Arial", 10), borderwidth=1, relief="solid", width=15).grid(row=row, column=col)
+        except sqlite3.Error as e:
+            messagebox.showerror("Database Error", f"An error occurred: {e}")
+
+    tk.Button(content_frame, text="Update Summary", command=fetch_and_display_sales, font=("Arial", 12), bg="blue", fg="white").pack(pady=10)
+
+    fetch_and_display_sales()
+
+
+def expense_summary(content_frame):
+    """Display expense summary with filtering options."""
+    clear_content(content_frame)
+
+    section_title = tk.Label(content_frame, text="Expense Summary", font=("Arial", 20, "bold"))
+    section_title.pack(pady=10)
+
+    # Dropdown for selecting the time period
+    period_label = tk.Label(content_frame, text="Select Time Period:", font=("Arial", 12))
+    period_label.pack(pady=5)
+
+    period_options = ["Week", "Month", "Year"]
+    selected_period = tk.StringVar(value="Week")
+
+    period_dropdown = tk.OptionMenu(content_frame, selected_period, *period_options)
+    period_dropdown.config(font=("Arial", 12), width=10)
+    period_dropdown.pack(pady=5)
+
+    # Table Frame
+    table_frame = tk.Frame(content_frame)
+    table_frame.pack(pady=10)
+
+    # Headers for Expense Table
+    headers = ["Date", "Expense Name", "Amount"]
+    for col, header in enumerate(headers):
+        header_label = tk.Label(table_frame, text=header, font=("Arial", 12, "bold"), borderwidth=1, relief="solid", width=15)
+        header_label.grid(row=0, column=col)
+
+    def fetch_and_display_expenses():
+        """Fetch and display expense data based on the selected time period."""
+        for widget in table_frame.winfo_children():
+            widget.destroy()
+
+        for col, header in enumerate(headers):
+            header_label = tk.Label(table_frame, text=header, font=("Arial", 12, "bold"), borderwidth=1, relief="solid", width=15)
+            header_label.grid(row=0, column=col)
+
+        period = selected_period.get()
+        query = ""
+
+        if period == "Week":
+            query = "SELECT date, expense_name, amount FROM expenses WHERE date >= date('now', '-7 days')"
+        elif period == "Month":
+            query = "SELECT date, expense_name, amount FROM expenses WHERE date >= date('now', '-1 month')"
+        elif period == "Year":
+            query = "SELECT date, expense_name, amount FROM expenses WHERE date >= date('now', '-1 year')"
+
+        try:
+            with sqlite3.connect(DB_PATH) as conn:
+                cursor = conn.cursor()
+                cursor.execute(query)
+                expenses = cursor.fetchall()
+
+                for row, expense in enumerate(expenses, start=1):
+                    for col, value in enumerate(expense):
+                        tk.Label(table_frame, text=value, font=("Arial", 10), borderwidth=1, relief="solid", width=15).grid(row=row, column=col)
+        except sqlite3.Error as e:
+            messagebox.showerror("Database Error", f"An error occurred: {e}")
+
+    tk.Button(content_frame, text="Update Summary", command=fetch_and_display_expenses, font=("Arial", 12), bg="orange", fg="white").pack(pady=10)
+
+    fetch_and_display_expenses()
+
+
+
+
+def open_main_window(user_role):
+    """Create and display the main application window based on user role."""
+    print(f"DEBUG: Opening Main Window for Role = {user_role}")  # Debug print
+
     main_window = tk.Tk()
     main_window.title("BITE AND BREW")
     main_window.geometry("800x600")
@@ -716,32 +913,37 @@ def open_main_window():
     content_frame = tk.Frame(main_window, bg="#f7f7f7")
     content_frame.pack(side=tk.RIGHT, expand=True, fill=tk.BOTH)
 
-    nav_buttons = [
-        ("Users", lambda: display_users(content_frame)),
-        ("Inventory", lambda: display_inventory(content_frame)),
-        ("Expenses", lambda: display_expenses(content_frame)),
-        ("Sales", lambda: display_sales(content_frame)),
-    ]
-
-    nav_buttons = [
-        ("Users", lambda: display_users(content_frame)),
-        ("Inventory", lambda: display_inventory(content_frame)),
-        ("Expenses", lambda: display_expenses(content_frame)),
-        ("Sales", lambda: display_sales(content_frame)),
-    ]
-
-    nav_buttons = [
-        ("Users", lambda: display_users(content_frame)),
-        ("Inventory", lambda: display_inventory(content_frame)),
-        ("Expenses", lambda: display_expenses(content_frame)),
-        ("Sales", lambda: display_sales(content_frame)),
-    ]
+    # Navigation buttons based on user role
+    if user_role == "admin":
+        nav_buttons = [
+            ("Users", lambda: display_users(content_frame)),
+            ("Inventory", lambda: display_inventory(content_frame)),
+            ("Expenses", lambda: display_expenses(content_frame)),
+            ("Sales", lambda: display_sales(content_frame)),
+            ("Reports", lambda: display_reports(content_frame)),
+        ]
+    elif user_role == "staff":
+        nav_buttons = [
+            ("Inventory", lambda: display_inventory(content_frame)),
+            ("Expenses", lambda: display_expenses(content_frame)),
+            ("Sales", lambda: display_sales(content_frame)),
+        ]
+    else:
+        messagebox.showerror("Access Denied", "Invalid user role.")
+        main_window.destroy()
+        return
 
     for text, command in nav_buttons:
         tk.Button(nav_panel, text=text, command=command, font=("Arial", 14), bg="#555555", fg="white", width=20, height=2).pack(pady=10)
 
-    display_users(content_frame)  # Default section
+    # Default section
+    if user_role == "admin":
+        display_users(content_frame)
+    else:
+        display_inventory(content_frame)
+
     main_window.mainloop()
+
 
 def create_login_window():
     """Create and display the login window."""
@@ -768,14 +970,25 @@ def create_login_window():
             return
 
         if validate_credentials(username, password):
-            messagebox.showinfo("Login Success", "Welcome to BITE AND BREW!")
-            login_window.destroy()
-            open_main_window()
+            # Fetch user role from the database
+            try:
+                with sqlite3.connect(DB_PATH) as conn:
+                    cursor = conn.cursor()
+                    cursor.execute("SELECT role FROM users WHERE username = ?", (username,))
+                    result = cursor.fetchone()
+                    if result:
+                        user_role = result[0]  # Retrieve the user's role
+                        messagebox.showinfo("Login Success", f"Welcome, {username} ({user_role.capitalize()})!")
+                        login_window.destroy()
+                        open_main_window(user_role)  # Pass user_role to the main window
+            except sqlite3.Error as e:
+                messagebox.showerror("Database Error", f"An error occurred: {e}")
         else:
-            messagebox.showerror("Login Error", "Invalid username or password")
+            messagebox.showerror("Login Error", "Invalid username or password.")
 
     tk.Button(login_window, text="Login", command=login, font=("Arial", 12), bg="green", fg="white").pack(pady=20)
     login_window.mainloop()
+
 
 if __name__ == "__main__":
     create_login_window()
