@@ -1,87 +1,74 @@
 import sqlite3
-from config import DB_PATH  # Ensure DB_PATH is imported from your config
-from business_logic.expense_logic import update_expense, get_expense_by_id
+from config import DB_PATH
 
 
-def add_test_expense():
-    """Add a test expense and return its ID."""
+def create_expense(expense_name, amount, date):
+    """Add a new expense to the database."""
+    if not expense_name or amount <= 0:
+        raise ValueError("Invalid expense data. Name cannot be empty, and amount must be positive.")
+    if not validate_date_format(date):
+        raise ValueError("Invalid date format. Use YYYY-MM-DD.")
     try:
         with sqlite3.connect(DB_PATH) as conn:
             cursor = conn.cursor()
-            cursor.execute('''
-            INSERT INTO expenses (expense_name, amount, date) VALUES (?, ?, ?)
-            ''', ('Test Expense', 100.0, '2024-12-01'))
+            cursor.execute(
+                "INSERT INTO expenses (expense_name, amount, date) VALUES (?, ?, ?)",
+                (expense_name, amount, date),
+            )
             conn.commit()
-            return cursor.lastrowid  # Return the ID of the inserted expense
     except sqlite3.Error as e:
-        print(f"Database error while adding test expense: {e}")
-        return None
+        print(f"Database error while creating expense: {e}")
+        raise
 
 
-def test_valid_update():
-    """Test updating an expense with valid data."""
-    print("\nRunning Test 1: Valid Update")
-    expense_id = add_test_expense()
-    if not expense_id:
-        print("Failed to add test expense.")
-        return
-
-    # Fetch the expense before the update
-    expense = get_expense_by_id(expense_id)
-    print(f"Before Update: {expense}")
-
-    # Update the expense
-    update_expense(expense_id, 'Updated Expense', 200.75, '2024-12-16')
-
-    # Fetch the expense after the update
-    updated_expense = get_expense_by_id(expense_id)
-    print(f"After Update: {updated_expense}")
-
-
-def test_invalid_expense_name():
-    """Test updating an expense with an invalid (empty) name."""
-    print("\nRunning Test 2: Invalid Expense Name")
-    expense_id = add_test_expense()
-    if not expense_id:
-        print("Failed to add test expense.")
-        return
-
+def get_expense_by_id(expense_id):
+    """Retrieve an expense by its ID."""
     try:
-        update_expense(expense_id, '', 200.75, '2024-12-16')  # Empty expense name
-    except ValueError as e:
-        print(f"Expected Error: {e}")
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM expenses WHERE id = ?", (expense_id,))
+            return cursor.fetchone()
+    except sqlite3.Error as e:
+        print(f"Database error while fetching expense: {e}")
+        raise
 
 
-def test_invalid_amount():
-    """Test updating an expense with a negative amount."""
-    print("\nRunning Test 3: Invalid Amount")
-    expense_id = add_test_expense()
-    if not expense_id:
-        print("Failed to add test expense.")
-        return
-
+def update_expense(expense_id, expense_name, amount, date):
+    """Update an existing expense."""
+    if not expense_name or amount <= 0:
+        raise ValueError("Invalid expense data. Name cannot be empty, and amount must be positive.")
+    if not validate_date_format(date):
+        raise ValueError("Invalid date format. Use YYYY-MM-DD.")
     try:
-        update_expense(expense_id, 'Updated Expense', -50.0, '2024-12-16')  # Negative amount
-    except ValueError as e:
-        print(f"Expected Error: {e}")
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE expenses SET expense_name = ?, amount = ?, date = ? WHERE id = ?",
+                (expense_name, amount, date, expense_id),
+            )
+            conn.commit()
+    except sqlite3.Error as e:
+        print(f"Database error while updating expense: {e}")
+        raise
 
 
-def test_invalid_date_format():
-    """Test updating an expense with an invalid date format."""
-    print("\nRunning Test 4: Invalid Date Format")
-    expense_id = add_test_expense()
-    if not expense_id:
-        print("Failed to add test expense.")
-        return
-
+def delete_expense(expense_id):
+    """Delete an expense by its ID."""
     try:
-        update_expense(expense_id, 'Updated Expense', 200.75, '2024/12/31')  # Invalid date format
-    except ValueError as e:
-        print(f"Expected Error: {e}")
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM expenses WHERE id = ?", (expense_id,))
+            conn.commit()
+    except sqlite3.Error as e:
+        print(f"Database error while deleting expense: {e}")
+        raise
 
 
-if __name__ == "__main__":
-    test_valid_update()
-    test_invalid_expense_name()
-    test_invalid_amount()
-    test_invalid_date_format()
+def validate_date_format(date):
+    """Validate the date format as YYYY-MM-DD."""
+    try:
+        from datetime import datetime
+        datetime.strptime(date, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False

@@ -570,16 +570,33 @@ def open_add_sale_form(content_frame):
 
     tk.Label(content_frame, text="Add New Sale", font=("Arial", 20, "bold")).pack(pady=10)
 
+    # Sale Date Field
     sale_date_label = tk.Label(content_frame, text="Sale Date (YYYY-MM-DD):")
     sale_date_label.pack(pady=5)
     sale_date_entry = tk.Entry(content_frame)
     sale_date_entry.pack(pady=5)
 
+    # Dropdown for Item Name
     item_name_label = tk.Label(content_frame, text="Item Name:")
     item_name_label.pack(pady=5)
-    item_name_entry = tk.Entry(content_frame)
-    item_name_entry.pack(pady=5)
 
+    # Fetch inventory items for dropdown
+    try:
+        with sqlite3.connect(DB_PATH) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT item_name FROM inventory")
+            items = [item[0] for item in cursor.fetchall()]  # Extract item names
+    except sqlite3.Error as e:
+        items = []  # Fallback if database error occurs
+        messagebox.showerror("Database Error", f"An error occurred: {e}")
+
+    item_name_var = tk.StringVar(content_frame)
+    if items:
+        item_name_var.set(items[0])  # Set default value to the first item
+    item_dropdown = tk.OptionMenu(content_frame, item_name_var, *items)
+    item_dropdown.pack(pady=5)
+
+    # Quantity Field
     quantity_label = tk.Label(content_frame, text="Quantity:")
     quantity_label.pack(pady=5)
     quantity_entry = tk.Entry(content_frame)
@@ -587,12 +604,13 @@ def open_add_sale_form(content_frame):
 
     def save_sale():
         sale_date = sale_date_entry.get().strip()
-        item_name = item_name_entry.get().strip()
+        item_name = item_name_var.get()  # Get selected item name
         quantity = quantity_entry.get().strip()
 
         if not sale_date or not item_name or not quantity:
             messagebox.showerror("Input Error", "All fields are required.")
             return
+
         try:
             quantity = int(quantity)
             if quantity <= 0:
@@ -602,32 +620,43 @@ def open_add_sale_form(content_frame):
             return
 
         try:
-            # Calculate total price based on inventory
+            # Calculate total price and update inventory
             with sqlite3.connect(DB_PATH) as conn:
                 cursor = conn.cursor()
-                cursor.execute("SELECT price FROM inventory WHERE item_name = ?", (item_name,))
+                cursor.execute("SELECT price, quantity FROM inventory WHERE item_name = ?", (item_name,))
                 result = cursor.fetchone()
                 if not result:
-                    messagebox.showerror("Input Error", f"Item '{item_name}' not found in inventory.")
+                    messagebox.showerror("Error", f"Item '{item_name}' not found in inventory.")
                     return
 
-                item_price = result[0]
+                item_price, stock_quantity = result
+                if quantity > stock_quantity:
+                    messagebox.showerror("Error", f"Insufficient stock for '{item_name}'. Available: {stock_quantity}")
+                    return
+
                 total_price = item_price * quantity
 
-                # Insert into sales table
-                cursor.execute("INSERT INTO sales (sale_date, item_name, quantity, total_price) VALUES (?, ?, ?, ?)",
-                               (sale_date, item_name, quantity, total_price))
+                # Insert sale record
+                cursor.execute(
+                    "INSERT INTO sales (sale_date, item_name, quantity, total_price) VALUES (?, ?, ?, ?)",
+                    (sale_date, item_name, quantity, total_price)
+                )
 
                 # Update inventory quantity
-                cursor.execute("UPDATE inventory SET quantity = quantity - ? WHERE item_name = ?", (quantity, item_name))
+                cursor.execute(
+                    "UPDATE inventory SET quantity = quantity - ? WHERE item_name = ?",
+                    (quantity, item_name)
+                )
                 conn.commit()
 
-                messagebox.showinfo("Success", "Sale added successfully.")
+                messagebox.showinfo("Success", "Sale added successfully!")
                 display_sales(content_frame)
         except sqlite3.Error as e:
             messagebox.showerror("Database Error", f"An error occurred: {e}")
 
+    # Save Button
     tk.Button(content_frame, text="Save Sale", command=save_sale, font=("Arial", 12), bg="green", fg="white").pack(pady=20)
+
 
 
 def open_edit_sale_form(content_frame, sale_id):
