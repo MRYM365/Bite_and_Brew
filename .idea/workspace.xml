@@ -6,10 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="fb7ebb15-c0ca-4f3c-bc1f-72a8bac57125" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/business_logic/expense_logic.py" beforeDir="false" afterPath="$PROJECT_DIR$/business_logic/expense_logic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/database/coffee_shop.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/database/coffee_shop.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/database_setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/database/database_setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/presentation/login_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/presentation/login_window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_expenses.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_inventory.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_sales.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_users.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,15 +56,22 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python tests.Python tests in test_expenses.py.executor&quot;: &quot;Run&quot;,
     &quot;Python.check_db_path.executor&quot;: &quot;Run&quot;,
     &quot;Python.database_setup.executor&quot;: &quot;Run&quot;,
+    &quot;Python.expense_logic.executor&quot;: &quot;Run&quot;,
     &quot;Python.insert_sample_data.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;Python.test_config.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_expenses.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_inventory.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_sales.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test_users.executor&quot;: &quot;Run&quot;,
     &quot;Python.users_window.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/myrez/Downloads/ZipFile-Software-7002/second 2&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -90,7 +101,16 @@
       <workItem from="1734698250836" duration="213000" />
       <workItem from="1734783276230" duration="12966000" />
       <workItem from="1734878359931" duration="15485000" />
-      <workItem from="1734968842998" duration="15270000" />
+      <workItem from="1734968842998" duration="17918000" />
+      <workItem from="1735152185057" duration="2166000" />
+      <workItem from="1735293340435" duration="54000" />
+      <workItem from="1735407474315" duration="1591000" />
+      <workItem from="1736007604569" duration="308000" />
+      <workItem from="1736373957181" duration="619000" />
+      <workItem from="1736456751857" duration="6856000" />
+      <workItem from="1736504750917" duration="6920000" />
+      <workItem from="1736599519333" duration="3276000" />
+      <workItem from="1736683516625" duration="1695000" />
     </task>
     <servers />
   </component>
@@ -98,11 +118,17 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Bite_and_Brew$.coverage" NAME=" Coverage Results" MODIFIED="1736601915850" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/Bite_and_Brew$check_db_path.coverage" NAME="check_db_path Coverage Results" MODIFIED="1734873121070" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bite_and_Brew$test_inventory.coverage" NAME="test_inventory Coverage Results" MODIFIED="1736509562553" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/Bite_and_Brew$test_sales.coverage" NAME="test_sales Coverage Results" MODIFIED="1736509550493" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/Bite_and_Brew$test_users.coverage" NAME="test_users Coverage Results" MODIFIED="1736509535278" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/Bite_and_Brew$test_config.coverage" NAME="test_config Coverage Results" MODIFIED="1734874392162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bite_and_Brew$database_setup.coverage" NAME="database_setup Coverage Results" MODIFIED="1734878437968" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/database" />
-    <SUITE FILE_PATH="coverage/Bite_and_Brew$main.coverage" NAME="main Coverage Results" MODIFIED="1735135021104" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bite_and_Brew$main.coverage" NAME="main Coverage Results" MODIFIED="1736687589186" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bite_and_Brew$users_window.coverage" NAME="users_window Coverage Results" MODIFIED="1734377323259" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/presentation" />
     <SUITE FILE_PATH="coverage/Bite_and_Brew$insert_sample_data.coverage" NAME="insert_sample_data Coverage Results" MODIFIED="1734911677760" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/database" />
-    <SUITE FILE_PATH="coverage/Bite_and_Brew$test_config.coverage" NAME="test_config Coverage Results" MODIFIED="1734874392162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bite_and_Brew$expense_logic.coverage" NAME="expense_logic Coverage Results" MODIFIED="1736515105879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/business_logic" />
+    <SUITE FILE_PATH="coverage/Bite_and_Brew$test_expenses.coverage" NAME="test_expenses Coverage Results" MODIFIED="1736600885223" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
   </component>
 </project>
